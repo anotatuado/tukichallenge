@@ -1,8 +1,8 @@
-from flask import Flask, request, make_response, redirect, render_template
+from flask import Flask, request, make_response, redirect, render_template, send_from_directory
 from werkzeug.utils import html
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 
 df = pd.read_csv('DB.csv')
 data_extract = range(len(df))
@@ -47,3 +47,7 @@ def hello():
         'summoners_datas' : summoners_datas,
     }
     return render_template('hello.html', **context)
+
+@app.route('/riot.txt')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
